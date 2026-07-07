@@ -20,6 +20,7 @@ import org.springframework.web.multipart.MultipartFile;
 @Service
 public class FileSystemStorageService implements StorageService {
 
+	
 	private final Path rootLocation;
 	
 	
@@ -61,21 +62,37 @@ public class FileSystemStorageService implements StorageService {
 	@Override
 	public String store(MultipartFile file) {
 		
-		String filename = StringUtils.cleanPath(file.getOriginalFilename());
+		String originalFilename= file.getOriginalFilename();
+		String filename = StringUtils.cleanPath(originalFilename != null ? originalFilename : "desconocido");
 		String extension = StringUtils.getFilenameExtension(filename);
-		String justFilename = filename.replace("."+extension, "");
-		String storedFilename = System.currentTimeMillis() + "_" + justFilename + "." + extension;
+		String justFilename;
+		
+		if(extension == null || extension.isEmpty()) {
+			String contentType = file.getContentType();
+			extension = (contentType != null && contentType.contains("/") ? contentType.split("/")[1] : "png");
+			justFilename = filename;
+		
+		}else {
+			justFilename = filename.substring(0, filename.lastIndexOf("."));
+		}
+		
+		String normalized = java.text.Normalizer.normalize(justFilename, java.text.Normalizer.Form.NFD);
+		String noTildes = normalized.replaceAll("\\p{InCombiningDiacriticalMarks}+", "");
+		String cleanName = noTildes.replaceAll("[^a-zA-Z0-9\\.\\-]", "_").toLowerCase();
+		
+		String storedFilename = System.currentTimeMillis() + "_" + cleanName + "." + extension;
+		
 		
 		try {
 			//verifica que el archivo no este vacio
 			if(file.isEmpty()) {
-				throw new RuntimeException("File is empty: " + filename);
+				throw new RuntimeException("El archivo esta vacío: " + filename);
 
 			}
 			
 			//verifica la seguridad del archivo
 			if(filename.contains("..")) {
-			    throw new RuntimeException("Cannot store file with relative path outside current directory " + filename);
+			    throw new RuntimeException("No se puede guardar en archivo en una ruta fuera del directorio actual" + filename);
 			}
 			
 			try(InputStream inputStream = file.getInputStream()){
@@ -87,7 +104,7 @@ public class FileSystemStorageService implements StorageService {
 			
 		} catch (IOException e) {
 			// TODO: handle exception
-		    throw new RuntimeException("Failed to store file " + filename, e);
+		    throw new RuntimeException("Error al guardar el archivo " + filename, e);
 		}
 	}
 	

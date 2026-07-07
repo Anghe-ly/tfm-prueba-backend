@@ -32,7 +32,7 @@ public class CompraModelo {
 	@JoinColumn(name="usuario_id")
 	private UsuarioModelo usuario;
 	
-	@ManyToMany
+	@ManyToMany(cascade = {CascadeType.PERSIST, CascadeType.MERGE})
 	private List<ProductoModelo> productos;
 	
 	private float total;

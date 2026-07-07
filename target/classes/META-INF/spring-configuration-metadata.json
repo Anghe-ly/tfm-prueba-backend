@@ -1,0 +1,17 @@
+{
+  "groups": [
+    {
+      "name": "storage",
+      "type": "com.example.demo.upload.StorageProperties",
+      "sourceType": "com.example.demo.upload.StorageProperties"
+    }
+  ],
+  "properties": [
+    {
+      "name": "storage.location",
+      "type": "java.lang.String",
+      "sourceType": "com.example.demo.upload.StorageProperties"
+    }
+  ],
+  "hints": []
+}
