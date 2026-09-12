@@ -9,12 +9,17 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.example.demo.upload.StorageService;
 
+/**
+ * Controlador de los archivos*/
 @RestController
 public class FilesControlador {
 
 	@Autowired
 	StorageService storageService;
 	
+	/**Metodo que devuelve la imagen del producto
+	 * @param filename el nombre dle archivo
+	 * @return response entity con la imagen en su body*/
 	@GetMapping("/files/{filename:.+}")
 	public ResponseEntity<Resource> serveFiles(@PathVariable String filename){
 		Resource file = storageService.loadAsResource(filename);

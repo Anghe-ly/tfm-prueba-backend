@@ -15,14 +15,23 @@ import org.springframework.web.bind.annotation.RestController;
 import com.example.demo.modelo.CarritoModelo;
 import com.example.demo.servicio.CarritoServicio;
 
-@RestController
-@RequestMapping("/private")
-public class CarritoControlador {
+
+/**
+ * Controlador de carrito que agrega, muestra o elimina 
+ * productos de un carrito de compra
+	 * */
+	@RestController
+	@RequestMapping("/private")
+	public class CarritoControlador {
  
 	@Autowired
 	private CarritoServicio servicio;
 	
-	
+	/**
+	 * Metodo que obtiene y muestra el carrito de compra
+	 * @param idUsuario  identifica al usuario asociado al carrito
+	 * @return ResponseEntity con el carrito en el body 
+	 * */
 	@GetMapping("{idUsuario}/carrito")
 	public ResponseEntity<CarritoModelo> mostrarCarrito(@PathVariable Long idUsuario){
 		
@@ -31,20 +40,29 @@ public class CarritoControlador {
 		return ResponseEntity.ok(carrito);
 	}
 	
-
+	/**
+	 * Metodo para añadir un producto al carrito
+	 * @param idUsuario identifica al usuario 
+	 * @param idProducto identifica al producto a añadir
+	 * @param cantidad del producto
+	 * @return ResponseEntity con el carrito actualizado en el body*/
 	@PostMapping("/{idUsuario}/agregar")
 	public ResponseEntity<CarritoModelo> agregarProducto(
 	        @PathVariable Long idUsuario, 
 	        @RequestParam Long idProducto, 
 	        @RequestParam int cantidad) {
 	    
-	    // Llamamos al método del servicio que ya tienes programado
 	    CarritoModelo carrito = servicio.agregarProducto(cantidad, idProducto, idUsuario);
 	    
 	    return ResponseEntity.ok(carrito);
 	}
 	
-	
+	/**
+	 * Metodo que elimina un producto del carrito
+	 * @param idUsuario  identifica al usuario asociado al carrito
+	 * @param idProducto identifica al producto a eliminar
+	 * @return ResponseEntity con el carrito actualizado en el body 
+	 * */
 	@DeleteMapping("/{idUsuario}/eliminar")
 	public ResponseEntity<CarritoModelo> eliminarProducto(@PathVariable Long idUsuario, @RequestParam Long idProducto) {
 		CarritoModelo carrito = servicio.eliminarProducto(idProducto, idUsuario);
@@ -52,11 +70,16 @@ public class CarritoControlador {
 		 return ResponseEntity.ok(carrito);
 	}
 	
+	/**
+	 * Metodo que vacia el carrito entero
+	 * @param idUsuario  identifica al usuario asociado al carrito
+	 * @return ResponseEntity con el status HTTP
+	 * */
 	@DeleteMapping("/{idUsuario}/vaciar")
-	public ResponseEntity<String> eliminarCarrito(@PathVariable Long idUsuario){
+	public ResponseEntity<String> vaciarCarrito(@PathVariable Long idUsuario){
 
 		CarritoModelo carrito = servicio.obtenerCarrito(idUsuario);
-		servicio.eliminarCarrito(carrito);
+		servicio.vaciarCarrito(carrito);
 		
 		return new ResponseEntity<>(HttpStatus.OK);
 		

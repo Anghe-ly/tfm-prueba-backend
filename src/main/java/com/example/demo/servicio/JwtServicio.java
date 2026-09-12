@@ -16,8 +16,12 @@ import io.jsonwebtoken.SignatureAlgorithm;
 import io.jsonwebtoken.io.Decoders;
 import io.jsonwebtoken.security.Keys;
 
+
+/**
+ * Servicio que genera, valida y extrae datos de un token*/
 @Service
 public class JwtServicio {
+	
 	//clave secreta hecha en base64
 	@Value("${security.jwt.secret-base64}")
 	private String claveSecreta;
@@ -26,16 +30,19 @@ public class JwtServicio {
 	@Value("${security.jwt.expiration-time}")
 	private long jwtExpiracion;
 
-	
-	
-	//metodo para firmar y verificar JWT con clave HMAC
+	/**
+	 * Metodo para firmar y verificar JWT con clave HMAC
+	 * */
 	private Key obtenerKey() {
 		byte[] claveBytes = Decoders.BASE64.decode(claveSecreta);
 		return Keys.hmacShaKeyFor(claveBytes);
 	}
 	
 	
-	//metodo que devuelve la duracion del token
+	/**
+	 * metodo que devuelve la duracion del token
+	 * @return expiracion del token
+	 * */
 	public long obtenerExpiracion() {
 		return jwtExpiracion;
 	}
@@ -45,15 +52,12 @@ public class JwtServicio {
 	/*
 	 * METODOS DE GENERAR TOKENS
 	 * */
-	//genera un token con solo username
-	public String generarTokenConUser(String user) {
-		return Jwts.builder()
-				.setSubject(user)
-				.signWith(obtenerKey())
-				.compact();
-	} 
 	
-	//genera un token con varios Claims
+	/**
+	 * Metodo que genera un token con varios claims
+	 * @param extraClaims datos que se incluiran en el token 
+	 * @param username identifica el nombre del usuario
+	 * @return el token generado con fecha de expiración y firma */
 	public String generarTokenVarios(Map<String, Object> extraClaims, String username) {
 		return Jwts.builder()
 				.setClaims(extraClaims != null ? extraClaims : new HashMap<>())
@@ -63,6 +67,13 @@ public class JwtServicio {
 				.signWith(obtenerKey(), SignatureAlgorithm.HS256) 
 				.compact();
 	}
+	
+	/**
+	 * Metodo que genera un token con id y rol del usuario
+	 * @param idUsuario identifica al usuario asociado al token
+	 * @param username nombre de usuario 
+	 * @param rol asignado al usuario
+	 * @return token generado y firmado*/
 	public String generarTokenConIdYRol(long idUsuario, String username, String rol) {
 		Map<String, Object> claims = new HashMap<>();
 		claims.put("idUsuario", idUsuario);
@@ -76,6 +87,8 @@ public class JwtServicio {
 	/*
 	 * METODOS DE EXTRACCION DE DATOS 
 	 * */
+	
+	
 	
 	//metodo que extrae el username del token
 	public String extractUsername(String token){
@@ -126,6 +139,7 @@ public class JwtServicio {
 	/*
 	 * METODOS DE VALIDACION DE TOKENS
 	 * */
+	
 	
 	private boolean isTokenExpired(String token) {
 		

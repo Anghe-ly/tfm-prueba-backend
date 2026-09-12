@@ -10,35 +10,37 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.example.demo.modelo.ProductoModelo;
-import com.example.demo.servicio.PruebaServicio;
+import com.example.demo.servicio.ProductoServicio;
 
-
+/**
+ * Controlador de los productos en el catalogo publico
+ *  */
 @RestController
 @RequestMapping("/public")
 
 
-public class PruebaControlador {
+public class ProductoControlador {
 	
 	@Autowired
-	private PruebaServicio servicio;
+	private ProductoServicio servicio;
 
-	//metodo que recupera y lista los productos
-		    @GetMapping("/prueba")
+	/** Metodo que muestra todos los productos en la lista */		   
+	@GetMapping("/prueba")
 		    public List<ProductoModelo> productos(){
 		    	return servicio.mostrar();
 		    }
-
-	//metodo que recupera el producto por su ID
-		    @GetMapping("/producto/{id}")
-		    public ResponseEntity<ProductoModelo> obtenerPorId(@PathVariable long id){
-		    	System.out.println(("buscando el id:    " + id));
-		    	ProductoModelo producto = servicio.obtenerPorId(id);
-		    	
-		    	
-		    	System.out.println("Producto encontrado:    " + producto);
-		    	return ResponseEntity.ok(producto);
-		    }
-		    
+	
+	/**
+	 * Metodo que recupera un producto por su id
+	 * @param id
+	 * @return una response Entity con el producto
+	 * */
+	@GetMapping("/producto/{id}")
+	public ResponseEntity<ProductoModelo> obtenerPorId(@PathVariable Long id){
+		ProductoModelo producto = servicio.obtenerPorId(id);
+		return ResponseEntity.ok(producto);
+	}
+   
 		    
 		  
 	}

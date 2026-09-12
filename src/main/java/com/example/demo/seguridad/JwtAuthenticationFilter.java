@@ -18,6 +18,10 @@ import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 
+
+/**
+ *Clase encargada de filtrar las peticiones HTTP
+ *para validar y autenticar al usuario que las hace*/
 @Component
 public class JwtAuthenticationFilter extends OncePerRequestFilter {
 
@@ -30,6 +34,15 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
 
 	}
 	
+	
+	/**
+	 * Metodo que extrae y valida el token de un usuario
+	 * con el header de la peticion,  excluyendo rutas publicas. 
+	 * Para un token invalido o mal formado no se autentica
+	 * @param request peticion HTTP 
+	 * @param response es la respuesta HTTP
+	 * @param filterChain cadena de filtros 
+	 *  */
 	@Override
 	protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain) throws IOException, ServletException {
 		
@@ -66,9 +79,9 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
 		      // token malformado: solo log y continuar sin autenticar
 	        System.out.println("JwtAuthenticationFilter: token inválido al extraer username -> " + e.getMessage());
 	        filterChain.doFilter(request, response);
-	        return;		}
-		
-		
+	        return;		
+	        }
+			
 		
 		Authentication auth = SecurityContextHolder.getContext().getAuthentication();
 		

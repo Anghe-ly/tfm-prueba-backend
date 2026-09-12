@@ -13,6 +13,10 @@ import com.example.demo.modelo.ProductoCarrito;
 import com.example.demo.modelo.ProductoModelo;
 import com.example.demo.repositorio.CompraRepositorio;
 
+
+/**
+ * 
+ * Servicio para la gestion de compra*/
 @Service
 public class CompraServicio {
 
@@ -24,20 +28,22 @@ public class CompraServicio {
     private CarritoServicio carritoServicio;
 
 		
-	
+	/**
+	 * Metodo que crea la compra 
+	 * clonando el carrito dentro de la compra 
+	 * y luego limpiando el carrito
+	 * @param idUsuario identifica asociado a la compra
+	 * @return la compra
+	 * */
 	public CompraModelo crearCompra(Long idUsuario) {
 		
-		//buscar carrito por id del usuario
 		CarritoModelo carrito = carritoServicio.obtenerCarrito(idUsuario);
-		
-		//verificar si carrito tiene productos
-		
+				
 		if(carrito.getProductos() == null || carrito.getProductos().isEmpty()) {
 			throw new RuntimeException("El carrito está vacio");
 			   
 		}
 		
-		//clonamos el carrito a la compra
 		
 			CompraModelo compra = new CompraModelo();
 			compra.setFechaCompra(LocalDateTime.now());
@@ -61,23 +67,37 @@ public class CompraServicio {
 			
 		//limpiamos el carrito
 			
-			carritoServicio.eliminarCarrito(carrito);
+			carritoServicio.vaciarCarrito(carrito);
 				
 		return compra;
 	}
 	
+	/**
+	 * Metodo que obtiene la lista de compras
+	 * @param idUsuario identifica al usuario asociado a las compras
+	 * @return lista de compras 
+	 * */
 	public List<CompraModelo> obtenerCompras(Long idUsuario) {
 		
 		return compraRepositorio.findAllByUsuario_IdUsuario(idUsuario);
 	}
 	
 	
+	/**
+	 * Metodo que obtiene una compra especifica con su id
+	 * @param idCompra identifica la compra
+	 * @return la compra 
+	 * */
 	public CompraModelo obtenerDetalles(Long idCompra) {
 		return compraRepositorio.findById(idCompra)
 	            .orElseThrow(() -> new RuntimeException("No se encontró el ID de la compra seleccionada"));
 		}
 	
 	
+	/**
+	 * Metodo que elimina una compra
+	 * @param idCompra identifica la compra a eliminar
+	 * */
 	public void eliminarCompra(Long idCompra) {
 		
 		CompraModelo compra = obtenerDetalles(idCompra);

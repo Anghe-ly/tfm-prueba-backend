@@ -16,7 +16,9 @@ import java.util.stream.Stream;
 import org.springframework.util.StringUtils;
 import org.springframework.web.multipart.MultipartFile;
 
-
+/**
+ * Servicio que gestiona y guarda las imagenes
+ * de los productos*/
 @Service
 public class FileSystemStorageService implements StorageService {
 
@@ -24,6 +26,11 @@ public class FileSystemStorageService implements StorageService {
 	private final Path rootLocation;
 	
 	
+	/**
+	 * Metodo que define la ruta donde se guardan 
+	 * las imagenes
+	 * @param properties propiedades con la ubicacion
+	 *  */
 	public FileSystemStorageService(StorageProperties properties) {
 		
 		this.rootLocation = Paths.get(properties.getLocation());
@@ -31,7 +38,10 @@ public class FileSystemStorageService implements StorageService {
 	}
 	
 	
-
+	/**
+	 * Metodo que crea el directorio
+	 * con la locación 
+	 * */
 	@Override
 	public void init() {
 		
@@ -45,7 +55,11 @@ public class FileSystemStorageService implements StorageService {
 		
 	}
 	
-	
+	/**
+	 * Metodo que carga todas las imagenes
+	 * de la locacion
+	 * @return las rutas relativas de las imagenes
+	 * */
 	@Override
 	public Stream<Path> loadAll(){
 		try {
@@ -59,6 +73,12 @@ public class FileSystemStorageService implements StorageService {
 		}
 	}
 	
+	
+	/**
+	 * Metodo que guarda las imagenes asignandoles
+	 * un nombre con su extension y verificando la seguridad
+	 * @param file archivo a guardar
+	 * @return nombre formateado del archivo*/
 	@Override
 	public String store(MultipartFile file) {
 		
@@ -103,14 +123,16 @@ public class FileSystemStorageService implements StorageService {
 			
 			
 		} catch (IOException e) {
-			// TODO: handle exception
 		    throw new RuntimeException("Error al guardar el archivo " + filename, e);
 		}
 	}
 	
 
 	
-	
+	/**
+	 * Metodo que devuelve la ruta de un archivo 
+	 * @param filename nombre del archivo 
+	 * @return localización del archivo con ese nombre*/
 	@Override
 	public Path load(String filename) {
 		
@@ -118,7 +140,11 @@ public class FileSystemStorageService implements StorageService {
 	}
 	
 	
-	
+	/**
+	 * Metodo que devuelve el archivo como 
+	 * recurso para una URL 
+	 * @param filename nombre del archivo 
+	 * @return un objeto de tipo recurso*/
 	@Override
 	public Resource loadAsResource(String filename){
 		try {
@@ -138,6 +164,10 @@ public class FileSystemStorageService implements StorageService {
 	}
 	
 	
+	/**
+	 * Metodo que busca y elimina una imagen determinada
+	 * @param filename nombre del archivo a eliminar
+	 */
 	@Override
 	public void delete(String filename) {
 		String justFilename = StringUtils.getFilename(filename);

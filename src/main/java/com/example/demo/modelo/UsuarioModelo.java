@@ -1,6 +1,5 @@
 package com.example.demo.modelo;
 
-import java.util.Optional;
 
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
@@ -8,6 +7,10 @@ import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.Table;
 
+/**
+ * Entidad que representa la tabla Usuario 
+ * en la base de datos
+ * */
 @Entity
 @Table(name = "usuarios")
 public class UsuarioModelo {
@@ -23,8 +26,6 @@ public class UsuarioModelo {
 	private String password;
 	
 	
-	
-
 	public UsuarioModelo(Long idUsuario, String user, String correo, String password) {
 		super();
 	

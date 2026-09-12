@@ -15,6 +15,9 @@ import org.springframework.web.bind.annotation.RestController;
 import com.example.demo.modelo.CompraModelo;
 import com.example.demo.servicio.CompraServicio;
 
+
+/**
+ * Controlador que crea, obtiene o elimina una compra*/
 @RestController
 @RequestMapping("/private/compra")
 public class CompraControlador {
@@ -23,6 +26,10 @@ public class CompraControlador {
 	CompraServicio compraServicio;
 	
 	
+	/**
+	 * Metodo que crea una compra 
+	 * @param idUsuario identifica al usuario asociado a la compra
+	 * @return un ResponseEntity con un status HTTP y la compra en el body*/
 	@PostMapping("/{idUsuario}")
 	public ResponseEntity<CompraModelo> crearCompra(@PathVariable Long idUsuario){
 		
@@ -31,18 +38,23 @@ public class CompraControlador {
 		return new ResponseEntity<>(compra, HttpStatus.OK);
 	}
 	
-	
+	/**
+	 * Metodo que devuelve el historial de compras
+	 * @param idUsuario identifica al usuario asociado a la compra
+	 * @return la lista de compras*/
 	@GetMapping("/historial/{idUsuario}")
 	public List<CompraModelo> historialCompra (@PathVariable Long idUsuario){
 		
 		List<CompraModelo> compras = compraServicio.obtenerCompras(idUsuario);
 		
-		return compras;
-		
+		return compras;	
 	}
 	
 	
-	
+	/**
+	 * Metodo que devuelve los detalles de la compra
+	 * @param idCompra identifica a la compra a detallar
+	 * @return ResponseEntity con los detalles y un status HTTP en el body*/
 	@GetMapping("/detalles/{idCompra}")
 	public ResponseEntity<CompraModelo> obtenerDetalles (@PathVariable Long idCompra){
 		
@@ -52,7 +64,10 @@ public class CompraControlador {
 	}
 	
 	
-	
+	/**
+	 * Metodo que elimina una compra
+	 * @param idCompra identifica la compra a eliminar
+	 * @return ResponseEntity con un status HTTP*/
 	@DeleteMapping("/eliminar/{idCompra}")
 	public ResponseEntity<String> eliminarCompra (@PathVariable Long idCompra){
 		

@@ -17,7 +17,9 @@ import org.springframework.web.cors.CorsConfigurationSource;
 import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
 
 
-
+/**
+ * Clase con la configuración de seguridad 
+ * */
 @Configuration
 @EnableWebSecurity
 public class SeguridadConfig {
@@ -25,7 +27,6 @@ public class SeguridadConfig {
 
 	private UserDetailsService userDetailsService;
 	private  JwtAuthenticationFilter jwtFilter;
-	//private JwtServicio jwtServicio;
 	
 	//constructor
 	public SeguridadConfig(UserDetailsService userDetailsService, JwtAuthenticationFilter jwtFilter) {
@@ -34,15 +35,24 @@ public class SeguridadConfig {
 	}
 	
 	
-	//bean para el passwordEncoder
+	/**
+	 * Bean de encriptacion de contraseñas
+	 * @return passwordEncoder 
+	 * */
 	@Bean
 	public PasswordEncoder passwordEncoder() {
 		return new BCryptPasswordEncoder();
 	}
 
 
-	
-	//bean del SecutiryFilterChain
+
+	/**
+	 * Bean que define los filtros y reglas
+	 * de seguridad, como las rutas publicas 
+	 * y privadas
+	 * @param http es un objeto de seguridad de http 
+	 * @return una cadena de filtros de seguridad
+	 * */
 	@Bean
 	public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
 
@@ -60,7 +70,11 @@ public class SeguridadConfig {
 		return http.build();
 	}
 	
-	// Bean de Configuración de CORS 
+
+	/**
+	 * Bean que configura los CORS
+	 * @return la configuracion cors basada en la url 
+	 * */
 	@Bean
 	public CorsConfigurationSource corsConfigurationSource() {
 		CorsConfiguration configuration = new CorsConfiguration();
@@ -75,12 +89,20 @@ public class SeguridadConfig {
 	}
 
 
+	/**
+	 * Bean del manager de autenticacion de Spring
+	 * @param http es un objeto de seguridad de http 
+	 * @return el manager de autenticación
+	 * */
 	  @Bean
 	    public AuthenticationManager authenticationManager(HttpSecurity http) throws Exception {
-	        return http.getSharedObject(AuthenticationManagerBuilder.class)
-	                   .userDetailsService(userDetailsService)
-	                   .passwordEncoder(passwordEncoder())
-	                   .and()
-	                   .build();
+	       
+		  AuthenticationManagerBuilder authManagerBuilder = http.getSharedObject(AuthenticationManagerBuilder.class);
+		  
+		  authManagerBuilder
+			  .userDetailsService(userDetailsService)
+	          .passwordEncoder(passwordEncoder());
+	          
+	          return authManagerBuilder.build();
 	    }
 }

@@ -7,7 +7,10 @@ import org.springframework.stereotype.Repository;
 import com.example.demo.modelo.ProductoModelo;
 
 
+/**
+ * Repositorio asociado a la tabla producto
+ * */
 @Repository
-public interface PruebaRepositorio extends JpaRepository <ProductoModelo, Long> {
+public interface ProductoRepositorio extends JpaRepository <ProductoModelo, Long> {
 
 }

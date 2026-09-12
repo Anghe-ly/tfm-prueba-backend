@@ -14,6 +14,9 @@ import com.example.demo.modelo.UsuarioModelo;
 import com.example.demo.repositorio.UserRepositorio;
 import com.example.demo.servicio.JwtServicio;
 
+
+/**
+ * Controlador para manejar el inicio de sesión */
 @RestController
 @RequestMapping("/login")
 
@@ -46,7 +49,13 @@ public class InicioSesionControlador {
 	}
 	
 	
-	//peticiones HTTP
+	/**
+	 * Metodo para validar credenciales y asignar roles 
+	 * al usuario que inicia sesión
+	 * @param request contiene el usuario y la contraseña que intenta iniciar sesión 
+	 * @return ResponseEntity con el token en la respuesta si las credenciales son correctas
+	 * si son incorrectas se devuelve UNAUTHORIZED
+	 * si hay otro problema se devuelve un INTERNAL SERVER ERROR*/
 	@PostMapping("/auth")
 	public ResponseEntity<LoginResponse> login(@RequestBody LoginRequest request) {
 		
@@ -72,7 +81,6 @@ public class InicioSesionControlador {
 
 		
 		} catch (BadCredentialsException e) {
-	        // Contraseña incorrecta
 	        return ResponseEntity.status(HttpStatus.UNAUTHORIZED)
 	                .body(new LoginResponse("Credenciales inválidas"));
 	    } catch (Exception e) {

@@ -6,19 +6,47 @@ import java.util.stream.Stream;
 import org.springframework.core.io.Resource;
 import org.springframework.web.multipart.MultipartFile;
 
+
+/*Interfaz con la que se gestionan 
+ * los archivos de la aplicacion
+ * */
 public interface StorageService {
 
-	void init(); //sirve para que se cree la carpeta sy no existe
-   
-	Stream<Path> loadAll();//metodo para cargar todos los ficheros
-
+	/**
+	 * sirve para que se cree la carpeta si no existe
+	 */
+	void init(); 
 	
-	String store(MultipartFile file); //guarda el archivo
+	/**
+	 * Se usa para cargar todos los ficheros
+	 * @return las rutas de los archivos*/
+	Stream<Path> loadAll();
 	
-	Path load(String filename); //carga el archivo
+	/**
+	 * Guarda el archivo
+	 * @param file archivo a guardar
+	 * @return nombre del archivo guardado
+	 */
+	String store(MultipartFile file); 
 	
-	Resource loadAsResource(String filename); //devuelve el fichero como recurso
+	/**
+	 * Carga el archivo
+	 * @param filename nombre del archivo 
+	 * @return ruta donde se almacenó
+	 * */
+	Path load(String filename); 
 	
-	void delete(String filename); //borra el archivo
+	/**
+	 * Devuelve el fichero como recurso
+	 * @param filename nombre del archivo
+	 * @return el archivo como recurso
+	 * */
+	Resource loadAsResource(String filename); 
+	
+	/**
+	 * Borra el archivo 
+	 * @param filename nombre del archivo a eliminar
+	  */
+	void delete(String filename); 
 	
 }

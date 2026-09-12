@@ -11,6 +11,12 @@ import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.Table;
 
+/**
+ * Entidad que representa la tabla ProductoCarrito 
+ * en la base de datos
+ * Se relaciona con las entidades
+ * CarritoModelo y Producto 
+ * */
 @Entity
 @Table(name = "producto_carrito")
 public class ProductoCarrito {

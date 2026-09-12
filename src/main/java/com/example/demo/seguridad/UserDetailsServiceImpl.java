@@ -10,6 +10,9 @@ import org.springframework.stereotype.Service;
 import com.example.demo.modelo.UsuarioModelo;
 import com.example.demo.repositorio.UserRepositorio;
 
+/**
+ * Servicio que implementa el UserDetailsService
+ * para que Spring busque a un usuario determinado*/
 @Service
 public class UserDetailsServiceImpl implements UserDetailsService {
 
@@ -17,7 +20,13 @@ public class UserDetailsServiceImpl implements UserDetailsService {
 	private UserRepositorio repositorio;
 	
 	
-	
+	/**
+	 * Metodo que busca a un usuario por su username
+	 * y construye un objeto User
+	 * @param user nombre del usuario
+	 * @return el usuario con las indicaciones de Spring Security
+	 * @throws UsernameNotFoundException si el usuario no existe 
+	 */
 	@Override
 	public UserDetails loadUserByUsername(String user) throws UsernameNotFoundException {
 		UsuarioModelo usuario = repositorio.findByUser(user);
@@ -34,10 +43,6 @@ public class UserDetailsServiceImpl implements UserDetailsService {
 		}else {
 			rol = "ROLE_USER";
 		}
-		
-		System.out.println("Usuario: " + usuario.getUser());
-		System.out.println("Rol asignado: " + rol);
-		
 		
 		return User.builder()
 				.username(usuario.getUser())

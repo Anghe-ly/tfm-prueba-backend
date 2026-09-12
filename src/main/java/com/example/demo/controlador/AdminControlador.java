@@ -16,8 +16,13 @@ import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.mvc.method.annotation.MvcUriComponentsBuilder;
 
 import com.example.demo.modelo.ProductoModelo;
-import com.example.demo.servicio.PruebaServicio;
+import com.example.demo.servicio.ProductoServicio;
 import com.example.demo.upload.StorageService;
+
+
+/** controlador de funciones admin que 
+ * contiene los metodos para CREAR, EDITAR o ELIMINAR productos
+ * */
 
 @PreAuthorize("hasRole('ADMIN')")
 @RestController
@@ -26,12 +31,15 @@ import com.example.demo.upload.StorageService;
 public class AdminControlador {
 	
 	@Autowired
-	private PruebaServicio servicio;
+	private ProductoServicio servicio;
 	@Autowired
 	private StorageService storageService;
 	
 
-    //metodo para registrar un nuevo producto
+	/** metodo para crear un nuevo producto del catalogo
+	 * @param producto es el producto a crear 
+	 * @param file es la imagen asociada al producto
+	 * @return un status HTTP */
     @PostMapping("/producto")
     public ResponseEntity<String> nuevoProducto(@RequestPart ProductoModelo producto, @RequestPart("file") MultipartFile file) {
     	 
@@ -47,7 +55,11 @@ public class AdminControlador {
 
     }
     
-//metodo para eliminar un producto (lo busca por su ID)
+    
+
+	/** metodo para eliminar un producto del catalogo y su imagen si la tiene
+		@param id del producto a eliminar
+	 * @return un status HTTP */
     @DeleteMapping("/eliminar/{id}")
     public  ResponseEntity<String> borrarProducto(@PathVariable long id) {
     	
@@ -63,14 +75,18 @@ public class AdminControlador {
     	
     }
     
-    //metodo para editar un producto. (añadir exclusividad de funciones para admin luego)
+
+    /** metodo para editar un producto
+     * @param id del producto a editar
+     * @param infoProducto todos los datos del producto para editar
+     * @return un status HTTP 
+     * 
+     * */
     @PutMapping("/editar/{id}")
     public ResponseEntity<String> modificarProducto(@PathVariable long id, @RequestBody ProductoModelo infoProducto){
     	 ProductoModelo prod = servicio.obtenerPorId(id);
     	 
     	 if(prod != null) {
-
-    		 System.out.println(infoProducto);
 	    	 prod.setNombre(infoProducto.getNombre());
 	    	 prod.setPrecio(infoProducto.getPrecio());
 	    	 servicio.insertarProducto(prod);

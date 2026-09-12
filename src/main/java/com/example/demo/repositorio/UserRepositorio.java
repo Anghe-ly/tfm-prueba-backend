@@ -7,6 +7,9 @@ import org.springframework.stereotype.Repository;
 
 import com.example.demo.modelo.UsuarioModelo;
 
+/**
+ * Repositorio asociado a la tabla usuario
+ * */
 @Repository
 public interface UserRepositorio extends JpaRepository <UsuarioModelo, Long> {
 

@@ -2,19 +2,18 @@ package com.example.demo.servicio;
 
 import java.time.LocalDateTime;
 import java.util.Optional;
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-
 import com.example.demo.modelo.CarritoModelo;
 import com.example.demo.modelo.ProductoCarrito;
 import com.example.demo.modelo.UsuarioModelo;
 import com.example.demo.modelo.ProductoModelo;
-
 import com.example.demo.repositorio.CarritoRepositorio;
-import com.example.demo.repositorio.PruebaRepositorio;
+import com.example.demo.repositorio.ProductoRepositorio;
 import com.example.demo.repositorio.UserRepositorio;
 
+/**
+ *Servicio con la logica del carrito de compra */
 @Service
 public class CarritoServicio {
 
@@ -25,8 +24,14 @@ public class CarritoServicio {
 	private UserRepositorio usuarioRepositorio;
 	
 	@Autowired
-	private  PruebaRepositorio productoRepositorio;
+	private  ProductoRepositorio productoRepositorio;
 	
+	
+	/**
+	 *Metodo que muestra un carrito asociado a un 
+	 *usuario si no tiene uno lo crea
+	 *@param idUsuario identifica al usuario asociado al carrito
+	 *@return el carrito ya xistente o el nuevo */
 	public CarritoModelo obtenerCarrito(Long idUsuario) {
 		CarritoModelo carrito = repositorio.findByUsuario_IdUsuario(idUsuario);
 		
@@ -38,7 +43,12 @@ public class CarritoServicio {
 		}
 	}
 	
-	
+	/**
+	 * Metodo donde se crea un carrito asignado a un
+	 * usuario y con una fecha de creacion
+	 * @param idUsuario identifica al usuario
+	 * @return el carrito creado
+	 * */
 	public CarritoModelo crearCarrito(Long idUsuario) {
 		CarritoModelo carrito = repositorio.findByUsuario_IdUsuario(idUsuario);
 		
@@ -57,7 +67,9 @@ public class CarritoServicio {
 	}
 	
 	
-	
+	/**
+	 * Metodo privado para actualizar los totales de cantidades 
+	 * y precios en el carrito*/
 	   private void actualizarTotales(CarritoModelo carrito) {
 	        int cantidadTotal = 0;
 	        float precioTotal = 0;
@@ -71,6 +83,16 @@ public class CarritoServicio {
 	        carrito.setTotal(precioTotal);
 	    }
 	   
+	   
+	   /**
+	    * Metodo que agrega un producto al carrito
+	    * del usuario, verificando si el producto existe
+	    * y actualizando su cantidad. Si esta es menor a 0
+	    * se elimina del carrito
+	    * @param cantidad identifica la cantidad
+	    * @param idProducto identifica el producto a incluir
+	    * @param idUsuario identifica al usuario
+	    * @return carrito actualizado */
 	   public CarritoModelo agregarProducto(int cantidad, Long idProducto, Long idUsuario) {
 		   
 		   
@@ -117,7 +139,13 @@ public class CarritoServicio {
 		   return carrito;
 	   }
 	   
-	   
+	   /**
+	    * Metodo que elimina un producto
+	    * del carrito, actualiza totales
+	    * y lo guarda
+	    * @param idProducto identifica al producto dentro del carrito a eliminar
+	    * @param idUsuario identifica al usuario
+	    * @return carrito actualizado*/
 	   public CarritoModelo eliminarProducto(Long idProducto, Long idUsuario) {
 		   
 		 CarritoModelo carrito = obtenerCarrito(idUsuario);
@@ -136,7 +164,11 @@ public class CarritoServicio {
 		   
 	   }
 	   
-	   public void eliminarCarrito(CarritoModelo carrito) {
+	   /**
+	    * Metodo que vacia el carrito entero
+	    * limpiando sus totales
+	    * @param carrito el carrito a limpiar*/
+	   public void vaciarCarrito(CarritoModelo carrito) {
 		   carrito.getProductos().clear();
 		   carrito.setCantidadTotal(0);
 		   carrito.setTotal(0);

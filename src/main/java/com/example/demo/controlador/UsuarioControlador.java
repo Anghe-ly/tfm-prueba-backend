@@ -11,6 +11,9 @@ import org.springframework.web.bind.annotation.RestController;
 import com.example.demo.modelo.UsuarioModelo;
 import com.example.demo.servicio.UsuarioServicio;
 
+/**
+ * Controlador encargado del registro y 
+ * recuperacion del usuario*/
 @RestController
 @RequestMapping("/public")
 
@@ -20,13 +23,21 @@ public class UsuarioControlador {
 	private UsuarioServicio servicio;
 	
 
-	// metodo que crea un usuario
+	/**
+	 * Metodo que inserta un nuevo usuario
+	 * @param usuario datos del usuario a insertar
+	 * @return el usuario insertado
+	 * */
 	@PostMapping("/usuario")
 	public UsuarioModelo nuevoUsuario(@RequestBody UsuarioModelo usuario) {
 		return servicio.insertarUser(usuario);
 	}
 	
-	//metodo que recupera al usuario por su ID
+	/**
+	 * Metodo que obtiene un usuario por su id 
+	 * @param id identificador del usuario a recuperar
+	 * @return usuario encontrado con id
+	 * */
 	@GetMapping("/usuario/{id}")
 	public UsuarioModelo obtenerPorId(@PathVariable long id) {
 		return servicio.obtenerPorId(id);

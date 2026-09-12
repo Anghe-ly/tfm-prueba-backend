@@ -17,6 +17,12 @@ import jakarta.persistence.ManyToMany;
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.Table;
 
+/**
+ * Entidad que representa la tabla Compra 
+ * en la base de datos
+ * Se relaciona con las entidades
+ * Usuario y ProductoCarrito 
+ * */
 @Entity
 @Table(name="compra")
 public class CompraModelo {

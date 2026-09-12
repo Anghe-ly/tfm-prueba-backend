@@ -7,6 +7,9 @@ import org.springframework.stereotype.Repository;
 
 import com.example.demo.modelo.CompraModelo;
 
+/**
+ * Repositorio asociado a la tabla compra
+ * */
 @Repository
 public interface CompraRepositorio extends JpaRepository <CompraModelo, Long>{
 
